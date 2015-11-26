@@ -25,11 +25,11 @@ namespace OO
         public void should_park_cars_to_most_empty_parkinglot()
         {
             var car = new Car();
-            var fullParkingLot = new ParkingLot(3);
-            var parkingLot = new ParkingLot(4);
-            smartParkingBoy.Manage(fullParkingLot, parkingLot);
+            var parkingLot = new ParkingLot(3);
+            var moreEmptyParkingLot = new ParkingLot(4);
+            smartParkingBoy.Manage(parkingLot, moreEmptyParkingLot);
             var token = smartParkingBoy.Park(car);
-            Assert.Same(car, parkingLot.Pick(token));
+            Assert.Same(car, moreEmptyParkingLot.Pick(token));
         }
 
         [Fact]
