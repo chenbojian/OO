@@ -6,7 +6,12 @@ namespace OO
     public class ParkingLot
     {
         private readonly Dictionary<object, Car> carDict = new Dictionary<object, Car>();
-        private int capacity;
+        private readonly int capacity;
+
+        public ParkingLot()
+        {
+            capacity = int.MaxValue;
+        }
 
         public ParkingLot(int capacity)
         {
@@ -15,11 +20,6 @@ namespace OO
                 throw new ArgumentOutOfRangeException("capacity");
             }
             this.capacity = capacity;
-        }
-
-        public ParkingLot()
-        {
-            capacity = int.MaxValue;
         }
 
         public int EmptyNumber
