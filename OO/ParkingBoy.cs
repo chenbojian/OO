@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using MoreLinq;
 
 namespace OO
@@ -6,16 +7,16 @@ namespace OO
     public class ParkingBoy
     {
         private readonly List<ParkingLot> managedParkingLots = new List<ParkingLot>();
-        private readonly IParkability parkability;
+        private readonly Park park;
 
         public ParkingBoy()
         {
-            parkability = new NormalParkability();
+            park = NormalPark;
         }
 
-        private ParkingBoy(IParkability parkability)
+        private ParkingBoy(Park park)
         {
-            this.parkability = parkability;
+            this.park = park;
         }
 
         public void Manage(params ParkingLot[] parkingLots)
@@ -25,7 +26,7 @@ namespace OO
 
         public object Park(Car car)
         {
-            return parkability.Park(car, managedParkingLots);
+            return park(car, managedParkingLots);
         }
 
         public Car Pick(object token)
@@ -41,53 +42,41 @@ namespace OO
             return null;
         }
 
-        private class NormalParkability: IParkability
+        private static object NormalPark(Car car, IEnumerable<ParkingLot> parkingLots)
         {
-            public object Park(Car car, IEnumerable<ParkingLot> parkingLots)
+            foreach (var parkingLot in parkingLots)
             {
-                foreach (var parkingLot in parkingLots)
+                var token = parkingLot.Park(car);
+                if (token != null)
                 {
-                    var token = parkingLot.Park(car);
-                    if (token != null)
-                    {
-                        return token;
-                    }
+                    return token;
                 }
-                return null;
             }
+            return null;
         }
 
-        private class SmartParkability : IParkability
+        private static object SmartPark(Car car, IEnumerable<ParkingLot> parkingLots)
         {
-            public object Park(Car car, IEnumerable<ParkingLot> parkingLots)
-            {
-                var mostEmptyParkingLot = parkingLots.MaxBy(p => p.EmptyNumber);
-                return mostEmptyParkingLot == null ? null : mostEmptyParkingLot.Park(car);
-            }
+            var parkingLot = parkingLots.MaxBy(p => p.EmptyNumber);
+            return parkingLot == null ? null : parkingLot.Park(car);
         }
 
-        public static ParkingBoy SmartEvolution()
-        {
-            return new ParkingBoy(new SmartParkability());
-        }
-
-        public static ParkingBoy SuperEvolution()
-        {
-            return new ParkingBoy(new SuperParkability());
-        }
-    }
-
-    public class SuperParkability : IParkability
-    {
-        public object Park(Car car, IEnumerable<ParkingLot> parkingLots)
+        private static object SuperPark(Car car, IEnumerable<ParkingLot> parkingLots)
         {
             var parkingLot = parkingLots.MaxBy(p => p.EmptyRate);
             return parkingLot == null ? null : parkingLot.Park(car);
         }
+
+        public static ParkingBoy SmartEvolution()
+        {
+            return new ParkingBoy(SmartPark);
+        }
+
+        public static ParkingBoy SuperEvolution()
+        {
+            return new ParkingBoy(SuperPark);
+        }
     }
 
-    interface IParkability
-    {
-        object Park(Car car, IEnumerable<ParkingLot> parkingLots);
-    }
+    internal delegate object Park(Car car, IEnumerable<ParkingLot> parkingLots);
 }
