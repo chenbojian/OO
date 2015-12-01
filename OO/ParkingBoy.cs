@@ -4,17 +4,17 @@ using MoreLinq;
 
 namespace OO
 {
-    public class ParkingBoy
+    public class ParkingBoy : IParkable
     {
         private readonly List<ParkingLot> managedParkingLots = new List<ParkingLot>();
-        private readonly Park park;
+        private readonly Park<ParkingLot> park;
 
         public ParkingBoy()
         {
-            park = NormalPark;
+            park = ParkStrategy.NormalPark;
         }
 
-        private ParkingBoy(Park park)
+        private ParkingBoy(Park<ParkingLot> park)
         {
             this.park = park;
         }
@@ -42,41 +42,14 @@ namespace OO
             return null;
         }
 
-        private static object NormalPark(Car car, IEnumerable<ParkingLot> parkingLots)
-        {
-            foreach (var parkingLot in parkingLots)
-            {
-                var token = parkingLot.Park(car);
-                if (token != null)
-                {
-                    return token;
-                }
-            }
-            return null;
-        }
-
-        private static object SmartPark(Car car, IEnumerable<ParkingLot> parkingLots)
-        {
-            var parkingLot = parkingLots.MaxBy(p => p.EmptyNumber);
-            return parkingLot == null ? null : parkingLot.Park(car);
-        }
-
-        private static object SuperPark(Car car, IEnumerable<ParkingLot> parkingLots)
-        {
-            var parkingLot = parkingLots.MaxBy(p => p.EmptyRate);
-            return parkingLot == null ? null : parkingLot.Park(car);
-        }
-
         public static ParkingBoy SmartEvolution()
         {
-            return new ParkingBoy(SmartPark);
+            return new ParkingBoy(ParkStrategy.SmartPark);
         }
 
         public static ParkingBoy SuperEvolution()
         {
-            return new ParkingBoy(SuperPark);
+            return new ParkingBoy(ParkStrategy.SuperPark);
         }
     }
-
-    internal delegate object Park(Car car, IEnumerable<ParkingLot> parkingLots);
 }

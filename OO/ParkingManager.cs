@@ -7,6 +7,12 @@ namespace OO
     {
         private readonly ParkingBoy stand = new ParkingBoy();
         private readonly List<ParkingBoy> managedParkingBoys = new List<ParkingBoy>();
+        private readonly Park<ParkingBoy> park;
+
+        public ParkingManager()
+        {
+            park = ParkStrategy.NormalPark;
+        }
 
         public void Manage(params ParkingLot[] parkingLots)
         {
@@ -20,15 +26,7 @@ namespace OO
 
         public object Park(Car car)
         {
-            foreach (var parkingBoy in managedParkingBoys)
-            {
-                var token = parkingBoy.Park(car);
-                if (token != null)
-                {
-                    return token;
-                }
-            }
-            return stand.Park(car);
+            return park(car, managedParkingBoys) ?? stand.Park(car);
         }
 
         public Car Pick(object token)

@@ -3,7 +3,12 @@ using System.Collections.Generic;
 
 namespace OO
 {
-    public class ParkingLot
+    public interface IParkable
+    {
+        object Park(Car car);
+    }
+
+    public class ParkingLot : IParkable
     {
         private readonly Dictionary<object, Car> carDict = new Dictionary<object, Car>();
         private readonly int capacity;
