@@ -4,10 +4,11 @@ using MoreLinq;
 
 namespace OO
 {
-    public class ParkingBoy : IParkable
+    public class ParkingBoy : IParkable, IPickable
     {
         private readonly List<ParkingLot> managedParkingLots = new List<ParkingLot>();
         private readonly Park<ParkingLot> park;
+        private readonly Pick<ParkingLot> pick = PickStrategy.NormalPick;
 
         public ParkingBoy()
         {
@@ -31,15 +32,7 @@ namespace OO
 
         public Car Pick(object token)
         {
-            foreach (var parkingLot in managedParkingLots)
-            {
-                var car = parkingLot.Pick(token);
-                if (car != null)
-                {
-                    return car;
-                }
-            }
-            return null;
+            return pick(token, managedParkingLots);
         }
 
         public static ParkingBoy SmartEvolution()

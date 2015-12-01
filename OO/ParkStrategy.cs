@@ -3,6 +3,11 @@ using MoreLinq;
 
 namespace OO
 {
+    public interface IParkable
+    {
+        object Park(Car car);
+    }
+
     public delegate object Park<in T>(Car car, IEnumerable<T> parkableObjs) where T : IParkable;
 
     public static class ParkStrategy 

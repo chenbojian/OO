@@ -8,6 +8,7 @@ namespace OO
         private readonly ParkingBoy stand = new ParkingBoy();
         private readonly List<ParkingBoy> managedParkingBoys = new List<ParkingBoy>();
         private readonly Park<ParkingBoy> park;
+        private readonly Pick<ParkingBoy> pick = PickStrategy.NormalPick;
 
         public ParkingManager()
         {
@@ -31,15 +32,7 @@ namespace OO
 
         public Car Pick(object token)
         {
-            foreach (var parkingBoy in managedParkingBoys)
-            {
-                var car = parkingBoy.Pick(token);
-                if (car != null)
-                {
-                    return car;
-                }
-            }
-            return  stand.Pick(token);
+            return  pick(token, managedParkingBoys) ?? stand.Pick(token);
         }
     }
 }
