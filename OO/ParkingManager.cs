@@ -7,28 +7,18 @@ namespace OO
     {
         private readonly ParkingBoy stand = new ParkingBoy();
         private readonly List<ParkingBoy> managedParkingBoys = new List<ParkingBoy>();
-        public object Park(Car car)
-        {
-            return stand.Park(car);
-        }
 
         public void Manage(params ParkingLot[] parkingLots)
         {
             stand.Manage(parkingLots);
         }
 
-        public Car Pick(object token)
-        {
-            return  stand.Pick(token);
-        }
-
-
         public void Manage(params ParkingBoy[] parkingBoys)
         {
             managedParkingBoys.AddRange(parkingBoys);
         }
 
-        public object LetParkingBoyPark(Car car)
+        public object Park(Car car)
         {
             foreach (var parkingBoy in managedParkingBoys)
             {
@@ -38,10 +28,10 @@ namespace OO
                     return token;
                 }
             }
-            return null;
+            return stand.Park(car);
         }
 
-        public Car LetParkingBoyPick(object token)
+        public Car Pick(object token)
         {
             foreach (var parkingBoy in managedParkingBoys)
             {
@@ -51,7 +41,7 @@ namespace OO
                     return car;
                 }
             }
-            return null;
+            return  stand.Pick(token);
         }
     }
 }

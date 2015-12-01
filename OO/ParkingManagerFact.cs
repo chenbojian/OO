@@ -59,7 +59,7 @@ namespace OO
             parkingBoy.Manage(parkingLot);
             parkingManager.Manage(parkingBoy);
             var car = new Car();
-            var token = parkingManager.LetParkingBoyPark(car);
+            var token = parkingManager.Park(car);
             Assert.Same(car, parkingBoy.Pick(token));
         }
 
@@ -72,7 +72,7 @@ namespace OO
             parkingManager.Manage(parkingBoy);
             var car = new Car();
             var token = parkingBoy.Park(car);
-            Assert.Same(car, parkingManager.LetParkingBoyPick(token));
+            Assert.Same(car, parkingManager.Pick(token));
         }
 
         [Fact]
@@ -87,7 +87,7 @@ namespace OO
 
             var car = new Car();
             parkingBoy.Park(new Car());
-            var tokenOfParkingBoy = parkingManager.LetParkingBoyPark(car);
+            var tokenOfParkingBoy = parkingManager.Park(car);
             Assert.Same(car, smartParkingBoy.Pick(tokenOfParkingBoy));
         }
 
