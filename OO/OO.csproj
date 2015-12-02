@@ -65,6 +65,8 @@
     <Compile Include="PakingLotFact.cs" />
     <Compile Include="ParkingBoy.cs" />
     <Compile Include="ParkingBoyFact.cs" />
+    <Compile Include="ParkingDirector.cs" />
+    <Compile Include="ParkingDirectorFact.cs" />
     <Compile Include="ParkingLot.cs" />
     <Compile Include="ParkingManager.cs" />
     <Compile Include="ParkingManagerFact.cs" />

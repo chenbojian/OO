@@ -35,6 +35,14 @@ namespace OO
             get { return (double) EmptyNumber / capacity; }
         }
 
+        public int Capacity
+        {
+            get
+            {
+                return capacity;
+            }
+        }
+
         public object Park(Car car)
         {
             if (carDict.Count >= capacity)

@@ -34,5 +34,19 @@ namespace OO
         {
             return  pick(token, managedParkingBoys) ?? stand.Pick(token);
         }
+
+        public Statistic Statistic()
+        {
+            var statistics = new List<Statistic>();
+            statistics.AddRange(stand.Statistic().children);
+            statistics.AddRange(managedParkingBoys.Select(b => b.Statistic()));
+            return new Statistic
+            {
+                What = "M",
+                num = statistics.Sum(s=>s.num),
+                sum = statistics.Sum(s=>s.sum),
+                children = statistics
+            };
+        }
     }
 }

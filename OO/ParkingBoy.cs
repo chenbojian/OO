@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using MoreLinq;
 
 namespace OO
@@ -33,6 +34,24 @@ namespace OO
         public Car Pick(object token)
         {
             return pick(token, managedParkingLots);
+        }
+
+        public Statistic Statistic()
+        {
+
+            return new Statistic
+            {
+                What = "B",
+                num = managedParkingLots.Sum(p => p.Capacity - p.EmptyNumber),
+                sum = managedParkingLots.Sum(p => p.Capacity),
+                children = managedParkingLots.Select(p => new Statistic
+                {
+                    What = "P",
+                    num = p.Capacity - p.EmptyNumber,
+                    sum = p.Capacity
+                }).ToList()
+            };
+
         }
 
         public static ParkingBoy SmartEvolution()
